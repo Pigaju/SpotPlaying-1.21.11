@@ -44,9 +44,12 @@ function pingYTMApi() {
     if (Settings.ytmEnabled) {
         getYTMSong();
     }
+    // Use the configured interval; fall back to 2000 ms for blank/NaN values,
+    // and enforce a hard minimum of 500 ms to avoid flooding the companion.
+    const interval = Math.max(Number(Settings.ytmPingRate) || 2000, 500);
     setTimeout(() => {
         pingYTMApi();
-    }, Math.max(Number(Settings.ytmPingRate) || 2000, 500));
+    }, interval);
 }
 
 register("renderOverlay", () => {

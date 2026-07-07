@@ -39,7 +39,7 @@ function normalizeResponse(data) {
             is_playing: player.hasSong === true && player.isPaused === false,
             currently_playing_type: "track",
             volume_percent: typeof player.volumePercent === "number" ? player.volumePercent : 0,
-            song_image: track.cover || "https://picsum.photos/200",
+            song_image: track.cover || "",
             source: "YouTube Music"
         };
     }
@@ -55,7 +55,7 @@ function normalizeResponse(data) {
             is_playing: data.isPlaying === true,
             currently_playing_type: "track",
             volume_percent: 0,
-            song_image: data.artUrl || "https://picsum.photos/200",
+            song_image: data.artUrl || "",
             source: data.source || "YouTube Music"
         };
     }
