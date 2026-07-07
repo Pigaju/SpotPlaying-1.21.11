@@ -7,5 +7,6 @@ export const state = {
     imageX: 0,
     imageY: 0,
     imageLink: "",
-    lyrics: null
+    lyrics: null,
+    ytmInfo: null
 };

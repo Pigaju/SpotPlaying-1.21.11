@@ -18,6 +18,7 @@ import { displaySongInfo } from "./render/overlay";
 import { updateLocalProgress } from "./utils/updateLocalProgress";
 import { playFromID } from "./utils/api/playFromID";
 import { getLyrics } from "./utils/api/getLyrics";
+import { getYTMSong } from "./utils/api/getYTMSong";
 import "./render/dragGui";
 import "./utils/keybinds";
 import "./utils/chatCommand";
@@ -35,6 +36,20 @@ function pingApi() {
     setTimeout(() => {
         pingApi();
     }, Number(Settings.apiPingRate));
+}
+
+function pingYTMApi() {
+    if (stopLoop) return;
+
+    if (Settings.ytmEnabled) {
+        getYTMSong();
+    }
+    // Use the configured interval; fall back to 2000 ms for blank/NaN values,
+    // and enforce a hard minimum of 500 ms to avoid flooding the companion.
+    const interval = Math.max(Number(Settings.ytmPingRate) || 2000, 500);
+    setTimeout(() => {
+        pingYTMApi();
+    }, interval);
 }
 
 register("renderOverlay", () => {
@@ -229,3 +244,4 @@ register("worldLoad", () => {
 })
 
 pingApi();
+pingYTMApi();

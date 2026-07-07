@@ -313,6 +313,34 @@ class Settings {
     })
     chatCommands = true;
 
+    // ─── YouTube Music ────────────────────────────────────────────────────────
+
+    @CheckboxProperty({
+        name: "Enable YouTube Music",
+        description: "&7Enables the YouTube Music companion integration.\n&7Reads track metadata from a local companion app or YouTube Music Desktop App.\n&8When enabled, YouTube Music takes priority over Spotify while a track is playing.",
+        category: "YouTube Music",
+        subcategory: "Configuration"
+    })
+    ytmEnabled = false;
+
+    @TextProperty({
+        name: "Companion Endpoint",
+        description: "&7URL of the companion app that supplies YouTube Music metadata.\n&8Default (YouTube Music Desktop App): http://localhost:26538/query",
+        category: "YouTube Music",
+        subcategory: "Configuration",
+        placeholder: "Enter URL.."
+    })
+    ytmEndpoint = "http://localhost:26538/query";
+
+    @TextProperty({
+        name: "Poll Interval (ms)",
+        description: "&7How often (in milliseconds) to ask the companion for track info.\n&8Recommended: 2000. Minimum: 500.",
+        category: "YouTube Music",
+        subcategory: "Configuration",
+        placeholder: "Enter Number.."
+    })
+    ytmPingRate = "2000";
+
     constructor() {
         this.initialize(this);
         this.addDependency("&e&oMove Overlay", "Overlay Enabled");
@@ -327,8 +355,11 @@ class Settings {
         this.addDependency("&e&oShorten Song Lyrics", "Song Lyrics");
         this.addDependency("&e&oSong Lyrics Explosion Strength", "Song Lyrics");
         this.addDependency("&e&oSong Lyrics Explosion Gravity", "Song Lyrics");
+        this.addDependency("Companion Endpoint", "Enable YouTube Music");
+        this.addDependency("Poll Interval (ms)", "Enable YouTube Music");
         this.setCategoryDescription("Now Playing", "&c&l!&r &7First time? Please run &a/spot tutorial &7before modifying options. &c&l!&r\nOptions titled &e&olike this&r require another feature to be enabled.");
         this.setCategoryDescription("Settings", "&7A module by &atdarth &7and &2Github Copilot&7.\n&c&lDo not share these tokens with anyone!&r");
+        this.setCategoryDescription("YouTube Music", "&7Show the currently playing YouTube Music track as an overlay.\n&7Install YouTube Music Desktop App or run a custom companion — see the README for setup.");
     }
 }
 
