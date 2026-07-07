@@ -18,6 +18,7 @@ import { displaySongInfo } from "./render/overlay";
 import { updateLocalProgress } from "./utils/updateLocalProgress";
 import { playFromID } from "./utils/api/playFromID";
 import { getLyrics } from "./utils/api/getLyrics";
+import { getYTMSong } from "./utils/api/getYTMSong";
 import "./render/dragGui";
 import "./utils/keybinds";
 import "./utils/chatCommand";
@@ -35,6 +36,17 @@ function pingApi() {
     setTimeout(() => {
         pingApi();
     }, Number(Settings.apiPingRate));
+}
+
+function pingYTMApi() {
+    if (stopLoop) return;
+
+    if (Settings.ytmEnabled) {
+        getYTMSong();
+    }
+    setTimeout(() => {
+        pingYTMApi();
+    }, Math.max(Number(Settings.ytmPingRate) || 2000, 500));
 }
 
 register("renderOverlay", () => {
@@ -229,3 +241,4 @@ register("worldLoad", () => {
 })
 
 pingApi();
+pingYTMApi();
