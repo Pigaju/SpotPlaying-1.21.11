@@ -11,7 +11,7 @@ let consecutiveFailures = 0;
  * state.currentSongInfo, so the existing overlay and progress logic work unchanged.
  *
  * Accepts two formats:
- *  1. Generic companion format (as documented in the README / problem statement):
+ *  1. Generic companion format (macOS system media, custom bridges, etc.):
  *       { title, artist, album, durationMs, positionMs, isPlaying, artUrl, source }
  *  2. YouTube Music Desktop App (ytmdesktop) native format:
  *       { player: { hasSong, isPaused, seekbarCurrentPosition }, track: { title, author, album, cover, duration } }
@@ -40,7 +40,7 @@ function normalizeResponse(data) {
             currently_playing_type: "track",
             volume_percent: typeof player.volumePercent === "number" ? player.volumePercent : 0,
             song_image: track.cover || "",
-            source: "YouTube Music"
+            source: "YouTube Music Desktop"
         };
     }
 
@@ -56,7 +56,7 @@ function normalizeResponse(data) {
             currently_playing_type: "track",
             volume_percent: 0,
             song_image: data.artUrl || "",
-            source: data.source || "YouTube Music"
+            source: data.source || "System Media"
         };
     }
 
@@ -77,13 +77,13 @@ export function getYTMSong() {
             try {
                 data = JSON.parse(response);
             } catch (e) {
-                console.warn("SpotPlaying YTM: Could not parse companion response.");
+                console.warn("SpotPlaying Companion: Could not parse companion response.");
                 return;
             }
 
             const info = normalizeResponse(data);
             if (!info) {
-                console.warn("SpotPlaying YTM: Unrecognised response format from companion.");
+                console.warn("SpotPlaying Companion: Unrecognised response format from companion.");
                 return;
             }
 
@@ -96,12 +96,9 @@ export function getYTMSong() {
                 const now = Date.now();
                 state.localProgress = info.progress_ms;
                 state.lastUpdateTime = now;
-            } else if (
-                state.currentSongInfo &&
-                state.currentSongInfo.source === "YouTube Music"
-            ) {
-                // YTM is no longer playing; clear so Spotify can take over on its
-                // next poll cycle without stale YTM data lingering.
+            } else if (state.ytmInfo) {
+                // Companion reported not-playing; clear companion-sourced overlay
+                // so Spotify can take over on its next poll cycle without stale data lingering.
                 state.currentSongInfo = null;
                 state.ytmInfo = null;
             }
@@ -110,7 +107,7 @@ export function getYTMSong() {
             consecutiveFailures++;
             if (consecutiveFailures <= MAX_RETRY_LOG) {
                 console.warn(
-                    `SpotPlaying YTM: Companion unreachable at ${Settings.ytmEndpoint} – ${error}`
+                    `SpotPlaying Companion: Server unreachable at ${Settings.ytmEndpoint} – ${error}`
                 );
             }
         });

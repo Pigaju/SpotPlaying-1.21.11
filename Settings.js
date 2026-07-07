@@ -313,20 +313,20 @@ class Settings {
     })
     chatCommands = true;
 
-    // ─── YouTube Music ────────────────────────────────────────────────────────
+    // ─── Media Companion ──────────────────────────────────────────────────────
 
     @CheckboxProperty({
-        name: "Enable YouTube Music",
-        description: "&7Enables the YouTube Music companion integration.\n&7Reads track metadata from a local companion app or YouTube Music Desktop App.\n&8When enabled, YouTube Music takes priority over Spotify while a track is playing.",
-        category: "YouTube Music",
+        name: "Enable Media Companion",
+        description: "&7Enables the media companion integration.\n&7Reads track metadata from a local companion server (macOS system media, YouTube Music Desktop App, or any compatible bridge).\n&8When enabled, the companion takes priority over Spotify while a track is playing.",
+        category: "Media Companion",
         subcategory: "Configuration"
     })
     ytmEnabled = false;
 
     @TextProperty({
         name: "Companion Endpoint",
-        description: "&7URL of the companion app that supplies YouTube Music metadata.\n&8Default (YouTube Music Desktop App): http://localhost:26538/query",
-        category: "YouTube Music",
+        description: "&7URL of the companion server that supplies now-playing metadata.\n&8Default: http://localhost:26538/query",
+        category: "Media Companion",
         subcategory: "Configuration",
         placeholder: "Enter URL.."
     })
@@ -335,7 +335,7 @@ class Settings {
     @TextProperty({
         name: "Poll Interval (ms)",
         description: "&7How often (in milliseconds) to ask the companion for track info.\n&8Recommended: 2000. Minimum: 500.",
-        category: "YouTube Music",
+        category: "Media Companion",
         subcategory: "Configuration",
         placeholder: "Enter Number.."
     })
@@ -355,11 +355,11 @@ class Settings {
         this.addDependency("&e&oShorten Song Lyrics", "Song Lyrics");
         this.addDependency("&e&oSong Lyrics Explosion Strength", "Song Lyrics");
         this.addDependency("&e&oSong Lyrics Explosion Gravity", "Song Lyrics");
-        this.addDependency("Companion Endpoint", "Enable YouTube Music");
-        this.addDependency("Poll Interval (ms)", "Enable YouTube Music");
+        this.addDependency("Companion Endpoint", "Enable Media Companion");
+        this.addDependency("Poll Interval (ms)", "Enable Media Companion");
         this.setCategoryDescription("Now Playing", "&c&l!&r &7First time? Please run &a/spot tutorial &7before modifying options. &c&l!&r\nOptions titled &e&olike this&r require another feature to be enabled.");
         this.setCategoryDescription("Settings", "&7A module by &atdarth &7and &2Github Copilot&7.\n&c&lDo not share these tokens with anyone!&r");
-        this.setCategoryDescription("YouTube Music", "&7Show the currently playing YouTube Music track as an overlay.\n&7Install YouTube Music Desktop App or run a custom companion — see the README for setup.");
+        this.setCategoryDescription("Media Companion", "&7Show the currently playing track as an overlay via a local companion server.\n&7Supports macOS system media detection and YouTube Music Desktop App — see the README for setup.");
     }
 }
 
